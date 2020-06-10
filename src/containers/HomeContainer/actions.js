@@ -12,18 +12,25 @@ export const types = {
 const simpleActions = {
   get: createRequestAction(types.GET),
 };
-export function fetchPictures(page: number = 1) {
+export function fetchPictures(newPage: number = 1) {
   return async (dispatch, getState) => {
-    dispatch(simpleActions.get.request());
-    try {
-      const data = await getPictures(page);
-      if (data) {
-        dispatch(simpleActions.get.success(data));
-      } else {
-        dispatch(simpleActions.get.failure('no data'));
+    const {
+      [NAME]: {
+        data: {page, pictures},
+      },
+    } = getState();
+    if (!pictures || page !== newPage) {
+      dispatch(simpleActions.get.request());
+      try {
+        const data = await getPictures(newPage);
+        if (data) {
+          dispatch(simpleActions.get.success(data));
+        } else {
+          dispatch(simpleActions.get.failure('no data'));
+        }
+      } catch (e) {
+        dispatch(simpleActions.get.failure(e));
       }
-    } catch (e) {
-      dispatch(simpleActions.get.failure(e));
     }
   };
 }

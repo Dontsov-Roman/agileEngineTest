@@ -7,7 +7,7 @@ const API_ENDPOINT = 'http://interview.agileengine.com'; //'http://interview.agi
 const setToken = async (token = '') => AsyncStorage.setItem('token', token);
 const getToken = async () => AsyncStorage.getItem('token');
 
-const getJson = (url, token = '') => {
+const getJson = (url, token = '') =>
   fetch(url, {
     method: 'GET',
     headers: {
@@ -15,7 +15,6 @@ const getJson = (url, token = '') => {
       Authorization: token ? `Bearer ${token}` : undefined,
     },
   }).then((r) => r.json());
-};
 
 export async function signIn() {
   const response = await fetch(`${API_ENDPOINT}/auth`, {
@@ -23,14 +22,13 @@ export async function signIn() {
     headers: {
       'Content-Type': 'Application/json',
     },
-    body: {
+    body: JSON.stringify({
       apiKey: API_KEY,
-    },
+    }),
   });
-  const result = await response.json();
-  console.warn(response, result);
-  setToken(result.token);
-  return result.token;
+  const {token} = await response.json();
+  setToken(token);
+  return token;
 }
 
 export async function getPictures(page: number = 1): Array<Object> {

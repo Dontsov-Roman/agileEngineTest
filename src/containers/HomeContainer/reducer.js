@@ -6,6 +6,7 @@ export const handlers = {
 };
 const initialState = {
   fetching: false,
-  data: '',
+  data: {},
+  page: 1,
 };
 export default createReducer(initialState, handlers);

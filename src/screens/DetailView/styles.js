@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet } from 'react-native'
-const { width } = Dimensions.get('window')
+import {Dimensions, StyleSheet} from 'react-native';
+const {width} = Dimensions.get('window');
 
 const styles: any = StyleSheet.create({
   container: {
@@ -28,13 +28,18 @@ const styles: any = StyleSheet.create({
   detailView: {
     position: 'absolute',
     bottom: 10,
-    width: 120,
-    right: 10,
+    width: 350,
+    right: 30,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  detailText: {
+    color: 'white',
+    fontSize: 20,
   },
   detailViewImage: {
     width: 50,
     height: 50,
   },
-})
-export default styles
+});
+export default styles;

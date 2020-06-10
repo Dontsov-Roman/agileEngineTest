@@ -58,6 +58,7 @@ export const createSetValueHandler = (types) => ({
   [types.SUCCESS]: (state, {payload: {id, value}}) => {
     return {
       ...state,
+      fetching: false,
       data: {
         ...state.data,
         [id]: value,

@@ -4,6 +4,8 @@ import DetailView from '../../screens/DetailView';
 import {connect} from 'react-redux';
 import {fetchPictureDetails} from './actions';
 import {selectHiResImage} from './selectors';
+import withBackButton from '../../hocs/withBackButton';
+import Share from 'react-native-share';
 
 export interface Props {
   navigation: any;
@@ -30,15 +32,23 @@ class DetailViewContainer extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const {navigation, fetchPictureDetails} = this.props;
-    const {pictureDetails} = navigation.state.params;
-    if (!this.props.hiResImage(pictureDetails.id)) {
-      fetchPictureDetails(pictureDetails.id);
+    const {id} = this.props.match.params;
+    const {fetchPictureDetails, hiResImage} = this.props;
+    if (!hiResImage(id)) {
+      fetchPictureDetails(id);
     }
   }
 
   share = (imageId: number): void => {
-    // TODO: implement share function
+    const {pictureDetails} = this.props;
+    if (pictureDetails) {
+      const {
+        author: title,
+        camera: message,
+        full_picture: url,
+      } = pictureDetails;
+      Share.open({title, message, url});
+    }
   };
 
   applyFilter = (type): void => {
@@ -46,15 +56,15 @@ class DetailViewContainer extends React.Component<Props, State> {
   };
 
   render() {
-    const {pictureDetails} = this.props.navigation.state.params;
-    const imageURL = pictureDetails.full_picture;
-    const {isLoading, hiResImage} = this.props;
+    const {pictureDetails} = this.props;
+    const imageURL = pictureDetails && pictureDetails.full_picture;
+    const {isLoading} = this.props;
     return (
       <DetailView
         imageUrl={imageURL}
         pictureDetails={pictureDetails}
         shareCallback={this.share}
-        isLoading={isLoading}
+        fetching={!pictureDetails || isLoading}
         applyFilterCallback={this.applyFilter}
       />
     );
@@ -67,9 +77,20 @@ function bindAction(dispatch) {
   };
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (
+  state,
+  {
+    match: {
+      params: {id},
+    },
+  },
+) => ({
   hiResImage: (imageId) => selectHiResImage(state, imageId),
-  isLoading: state.detailViewReducer.isLoading,
+  pictureDetails: selectHiResImage(state, id),
+  isLoading: state.detailViewReducer.fetching,
 });
 
-export default connect(mapStateToProps, bindAction)(DetailViewContainer);
+export default connect(
+  mapStateToProps,
+  bindAction,
+)(withBackButton(DetailViewContainer));

@@ -14,7 +14,7 @@ const simpleActions = {
 };
 
 export function fetchPictureDetails(id: number) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(simpleActions.get.request());
     try {
       const value = await getPictureDetails(id);
