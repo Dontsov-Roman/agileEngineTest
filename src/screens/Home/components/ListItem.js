@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {TouchableOpacity, Image} from 'react-native';
+import DefaultImage from './defaultImage.jpg';
 import styles from '../styles';
 
 type Props = {
@@ -21,6 +22,7 @@ class ListItem extends React.PureComponent<Props> {
           resizeMode="cover"
           resizeMethod="scale"
           source={{uri: imageUrl}}
+          defaultSource={DefaultImage}
         />
       </TouchableOpacity>
     );

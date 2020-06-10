@@ -18,7 +18,7 @@ class DetailsFooter extends React.PureComponent<Props> {
     console.warn(pictureDetails);
     return (
       <View style={styles.detailView}>
-        <View style={{width: 150}}>
+        <View style={{width: 200}}>
           <Text
             ellipsizeMode="tail"
             numberOfLines={2}

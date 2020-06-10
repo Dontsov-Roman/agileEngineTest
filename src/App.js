@@ -5,12 +5,11 @@
  */
 import * as React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import {StackNavigator} from 'react-navigation';
 import {NativeRouter as Router, Route} from 'react-router-native';
+import AnimatedStack from 'react-router-native-animate-stack';
 import {Provider} from 'react-redux';
 
 import configureStore from './store/configureStore';
-import Auth from './containers/AuthContainer/index';
 
 import Home from './containers/HomeContainer/index';
 import DetailView from './containers/DetailViewContainer/index';
@@ -33,8 +32,10 @@ export default class Setup extends React.Component<Props, State> {
       <SafeAreaView style={styles.safeArea}>
         <Provider store={configureStore()}>
           <Router>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/detail/:id" component={DetailView} />
+            <AnimatedStack style={{height: '100%'}} swipeCancelSpeed={50}>
+              <Route exact path="/" component={Home} />
+              <Route path="/detail/:id" component={DetailView} />
+            </AnimatedStack>
           </Router>
         </Provider>
       </SafeAreaView>
